@@ -4,6 +4,8 @@ use openrtb::current::BidResponse;
 
 use crate::models::*;
 
+pub mod test;
+
 #[async_trait]
 pub trait Bidder {
     async fn make_request(&self, ctx: &AdxContext, ad_campaign: &AdCampaign, ad_source: &AdSource) -> Result<HttpRequestData>;

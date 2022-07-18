@@ -1,7 +1,11 @@
+use core::time;
+
 use axum::body::Body;
 use axum::http::header::HeaderMap;
-
 use bytes::Bytes;
+use openrtb::current::BidResponse;
+
+use crate::models::{AdCampaign, AdSource};
 
 pub struct AdxContext {
     // todo
@@ -21,4 +25,17 @@ pub struct HttpRequestData {
     pub uri: String,
     pub body: Bytes,
     pub headers: HeaderMap,
+}
+
+pub struct BidderResponse {
+    pub ad_source: AdSource,
+    pub ad_campaign: AdCampaign,
+    pub bid_response: BidResponse,
+}
+
+
+pub struct HttpCallInfo {
+    pub request: HttpRequestData,
+    pub response: HttpResponseData,
+    pub process_time: time::Duration,
 }

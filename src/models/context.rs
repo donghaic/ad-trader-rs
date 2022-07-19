@@ -23,14 +23,14 @@ pub struct HttpRequestData {
     pub ad_source_code: String,
     pub method: String,
     pub uri: String,
-    pub body: Bytes,
-    pub headers: HeaderMap,
+    pub body: Option<Bytes>,
+    pub headers: Option<HeaderMap>,
 }
 
 pub struct BidderResponse {
-    pub ad_source: AdSource,
-    pub ad_campaign: AdCampaign,
-    pub bid_response: BidResponse,
+    pub ad_source: Option<AdSource>,
+    pub ad_campaign: Option<AdCampaign>,
+    pub bid_response: Option<BidResponse>,
 }
 
 

@@ -15,8 +15,8 @@ pub struct AdxContext {
 
 pub struct HttpResponseData {
     pub status_code: i16,
-    pub body: Bytes,
-    pub headers: HeaderMap,
+    pub body: Option<Bytes>,
+    pub headers: Option<HeaderMap>,
 }
 
 pub struct HttpRequestData {
@@ -27,7 +27,9 @@ pub struct HttpRequestData {
     pub headers: Option<HeaderMap>,
 }
 
+#[derive(Debug)]
 pub struct BidderResponse {
+    pub tag: String,
     pub ad_source: Option<AdSource>,
     pub ad_campaign: Option<AdCampaign>,
     pub bid_response: Option<BidResponse>,

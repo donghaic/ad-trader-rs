@@ -14,6 +14,7 @@ bloom = "0.2.0"
 tokio = {version = "1", features =["full"]}
 bytes = "1"
 reqwest = { version = "0.11", features = ["json"] }
+futures = "0.3.21"
 
 [dev-dependencies]
 tokio-test = "*"

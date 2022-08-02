@@ -1,3 +1,5 @@
+mod adx_api;
+
 use anyhow::Result;
 use async_trait::async_trait;
 use openrtb::current::BidRequest;

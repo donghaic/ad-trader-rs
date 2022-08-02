@@ -27,6 +27,8 @@ impl AdFilter for BlackIpFilter {
 
 #[cfg(test)]
 mod tests {
+    use std::sync::Arc;
+    use crate::models::Media;
     use super::*;
 
     #[tokio::test]
@@ -38,7 +40,7 @@ mod tests {
         assert_eq!(exist, true);
 
         let filter = BlackIpFilter::new(bloom);
-        let res = filter.is_match(&AdxContext { ip: "123".to_owned() }, &AdCampaign {}).await;
+        let res = filter.is_match(&AdxContext { ip: "123".to_owned(), is_log: false, media: Arc::new(Media { id: 0, name: "".to_string() }) }, &AdCampaign {}).await;
         println!("res {}", res);
         assert_eq!(res, false);
     }

@@ -1,15 +1,18 @@
 use core::time;
+use std::sync::Arc;
 
 use axum::body::Body;
 use axum::http::header::HeaderMap;
 use bytes::Bytes;
 use openrtb::current::BidResponse;
 
-use crate::models::{AdCampaign, AdSource};
+use crate::models::{AdCampaign, AdSource, Media};
 
 pub struct AdxContext {
     // todo
     pub ip: String,
+    pub is_log: bool,
+    pub media: Arc<Media>,
 }
 
 

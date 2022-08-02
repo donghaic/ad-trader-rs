@@ -9,3 +9,15 @@ pub struct AdSource {
     pub bid_url: String,
     pub qps: u32,
 }
+
+#[derive(Debug)]
+pub struct Media {
+    pub id: u32,
+    pub name: String,
+}
+
+#[derive(Debug)]
+pub struct Adslot {
+    pub id: u32,
+    pub name: String,
+}

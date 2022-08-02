@@ -6,13 +6,21 @@ use reqwest::Client;
 
 use crate::adapters::bidders::{Bidder, BidderKind};
 use crate::adapters::test::{TestBidder, TestBidder2};
-use crate::models::{AdCampaign, AdSource, AdxContext, BidderResponse, HttpCallInfo, HttpRequestData, HttpResponseData};
+use crate::models::{
+    AdCampaign, AdSource, AdxContext, BidderResponse, HttpCallInfo, HttpRequestData,
+    HttpResponseData,
+};
 
 #[async_trait]
 trait AdaptedBidder {
-    async fn request_bid(&self, http_client: &Client, ctx: &AdxContext, ad_campaign: &AdCampaign, ad_source: &AdSource) -> Result<BidderResponse>;
+    async fn request_bid(
+        &self,
+        http_client: &Client,
+        ctx: &AdxContext,
+        ad_campaign: &AdCampaign,
+        ad_source: &AdSource,
+    ) -> Result<BidderResponse>;
 }
-
 
 struct BidderAdapter {
     bidder: BidderKind,
@@ -20,19 +28,30 @@ struct BidderAdapter {
 
 impl BidderAdapter {
     fn new(bidder: BidderKind) -> BidderAdapter {
-        Self {
-            bidder
-        }
+        Self { bidder }
     }
 }
 
-
 #[async_trait]
 impl AdaptedBidder for BidderAdapter {
-    async fn request_bid(&self, http_client: &Client, ctx: &AdxContext, ad_campaign: &AdCampaign, ad_source: &AdSource) -> Result<BidderResponse> {
-        let requestData = self.bidder.make_request(ctx, ad_campaign, ad_source).await?;
-        let call_info = self.do_request(http_client, ctx, ad_campaign, ad_source).await?;
-        let bid = self.bidder.make_bid(ctx, ad_campaign, &call_info.response).await?;
+    async fn request_bid(
+        &self,
+        http_client: &Client,
+        ctx: &AdxContext,
+        ad_campaign: &AdCampaign,
+        ad_source: &AdSource,
+    ) -> Result<BidderResponse> {
+        let requestData = self
+            .bidder
+            .make_request(ctx, ad_campaign, ad_source)
+            .await?;
+        let call_info = self
+            .do_request(http_client, ctx, ad_campaign, ad_source)
+            .await?;
+        let bid = self
+            .bidder
+            .make_bid(ctx, ad_campaign, &call_info.response)
+            .await?;
         // todo!()
         Ok(BidderResponse {
             tag: bid.id,
@@ -44,7 +63,13 @@ impl AdaptedBidder for BidderAdapter {
 }
 
 impl BidderAdapter {
-    async fn do_request(&self, http_client: &Client, ctx: &AdxContext, ad_campaign: &AdCampaign, ad_source: &AdSource) -> Result<HttpCallInfo> {
+    async fn do_request(
+        &self,
+        http_client: &Client,
+        ctx: &AdxContext,
+        ad_campaign: &AdCampaign,
+        ad_source: &AdSource,
+    ) -> Result<HttpCallInfo> {
         //todo!()
         Ok(HttpCallInfo {
             request: HttpRequestData {
@@ -68,10 +93,10 @@ impl BidderAdapter {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use std::collections::HashMap;
+    use std::sync::Arc;
 
     use futures::future::join_all;
 
@@ -85,11 +110,18 @@ mod tests {
         let _client = reqwest::Client::new();
     }
 
-
     #[tokio::test]
     async fn test_bidder() {
         let client = reqwest::Client::new();
-        let mut ctx = AdxContext { ip: "".to_string() };
+        let media = Media {
+            id: 10,
+            name: "".to_string(),
+        };
+        let mut ctx = AdxContext {
+            ip: "".to_string(),
+            is_log: false,
+            media: Arc::new(media),
+        };
         let ad_campaign = &AdCampaign {};
         let ad_source = &AdSource {
             id: 1,
